@@ -1,11 +1,12 @@
 <?php
-require_once __DIR__ . '/../app/controllers/AuthController.php';
+// public/index.php
 
-$url = $_GET['url'] ?? '';
+// Démarrer une session si nécessaire (utile pour la gestion des utilisateurs connectés)
+session_start();
 
-if ($url === 'signin' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $controller = new AuthController();
-    $controller->login($_POST['email'], $_POST['password']);
-} else {
-    include __DIR__ . '/../app/views/signin.html';
-}
+// Inclure automatiquement les classes du core
+require_once '../core/Router.php';
+
+// Instancier le routeur et appeler la méthode route
+$router = new Router();
+$router->route();

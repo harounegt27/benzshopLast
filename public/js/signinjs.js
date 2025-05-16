@@ -1,1 +1,0 @@
-console.log("JS actif sur la page de connexion.");
