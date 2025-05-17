@@ -1,0 +1,65 @@
+CREATE DATABASE IF NOT EXISTS benzshop;
+USE benzshop;
+
+-- Table Utilisateur (superclasse)
+CREATE TABLE Utilisateur (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    motDePasse VARCHAR(255)
+);
+
+-- Table Administrateur
+CREATE TABLE Administrateur (
+    id INT PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES Utilisateur(id) ON DELETE CASCADE
+);
+
+-- Table Client
+CREATE TABLE Client (
+    id INT PRIMARY KEY,
+    adresse VARCHAR(255),
+    numeroTel VARCHAR(20),
+    FOREIGN KEY (id) REFERENCES Utilisateur(id) ON DELETE CASCADE
+);
+
+-- Table Produit
+CREATE TABLE Produit (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nomProd VARCHAR(100),
+    description TEXT,
+    prix DOUBLE,
+    stock INT,
+    categorie VARCHAR(100)
+);
+
+-- Table Commande
+CREATE TABLE Commande (
+    idCommande INT PRIMARY KEY AUTO_INCREMENT,
+    idClient INT,
+    date DATE,
+    status VARCHAR(50),
+    montantTotal DOUBLE,
+    FOREIGN KEY (idClient) REFERENCES Client(id) ON DELETE SET NULL
+);
+
+-- Table LigneCommande (relation N..N entre Commande et Produit)
+CREATE TABLE LigneCommande (
+    idCommande INT,
+    idProduit INT,
+    Qte INT,
+    PRIMARY KEY (idCommande, idProduit),
+    FOREIGN KEY (idCommande) REFERENCES Commande(idCommande) ON DELETE CASCADE,
+    FOREIGN KEY (idProduit) REFERENCES Produit(id) ON DELETE CASCADE
+);
+
+-- Table Avis
+CREATE TABLE Avis (
+    idAvis INT PRIMARY KEY AUTO_INCREMENT,
+    idClient INT,
+    idProduit INT,
+    commentaire TEXT,
+    note INT CHECK (note BETWEEN 1 AND 5),
+    FOREIGN KEY (idClient) REFERENCES Client(id) ON DELETE SET NULL,
+    FOREIGN KEY (idProduit) REFERENCES Produit(id) ON DELETE CASCADE
+);
